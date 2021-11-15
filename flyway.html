@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Cách cài đặt và sử dụng Flyway cho window | My Blog</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Cách cài đặt và sử dụng Flyway cho window" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Giới Thiệu: Flyway là một công cụ di chuyển cơ sở dữ liệu mã nguồn mở. Nó được ủng hộ mạnh mẽ vì quy ước và cấu hình đơn giản Nó chỉ dựa trên 7 lệnh cơ bản: Migrate, Clean, Info, Validate, Undo, Baseline and Repair. Các phép di chuyển có thể được viết bằng SQL (cú pháp dành riêng cho cơ sở dữ liệu (chẳng hạn như PL / SQL, T-SQL, …) được hỗ trợ) hoặc Java (để chuyển đổi dữ liệu nâng cao hoặc xử lý các LOB). Hướng dẫn ngắn gọn này sẽ giúp bạn cách thiết lập và chạy với công cụ Flyway Command-line và sử dụng trên cơ sở dữ liệu MSSQL. Bạn sẽ mất khoảng 10 phút để hoàn thành hướng dẫn này." />
+<meta property="og:description" content="Giới Thiệu: Flyway là một công cụ di chuyển cơ sở dữ liệu mã nguồn mở. Nó được ủng hộ mạnh mẽ vì quy ước và cấu hình đơn giản Nó chỉ dựa trên 7 lệnh cơ bản: Migrate, Clean, Info, Validate, Undo, Baseline and Repair. Các phép di chuyển có thể được viết bằng SQL (cú pháp dành riêng cho cơ sở dữ liệu (chẳng hạn như PL / SQL, T-SQL, …) được hỗ trợ) hoặc Java (để chuyển đổi dữ liệu nâng cao hoặc xử lý các LOB). Hướng dẫn ngắn gọn này sẽ giúp bạn cách thiết lập và chạy với công cụ Flyway Command-line và sử dụng trên cơ sở dữ liệu MSSQL. Bạn sẽ mất khoảng 10 phút để hoàn thành hướng dẫn này." />
+<meta property="og:site_name" content="My Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-11-14T09:50:24+07:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Cách cài đặt và sử dụng Flyway cho window" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2021/11/14/how-to-install-flyway.html"},"url":"http://localhost:4000/jekyll/update/2021/11/14/how-to-install-flyway.html","@type":"BlogPosting","headline":"Cách cài đặt và sử dụng Flyway cho window","dateModified":"2021-11-14T09:50:24+07:00","datePublished":"2021-11-14T09:50:24+07:00","description":"Giới Thiệu: Flyway là một công cụ di chuyển cơ sở dữ liệu mã nguồn mở. Nó được ủng hộ mạnh mẽ vì quy ước và cấu hình đơn giản Nó chỉ dựa trên 7 lệnh cơ bản: Migrate, Clean, Info, Validate, Undo, Baseline and Repair. Các phép di chuyển có thể được viết bằng SQL (cú pháp dành riêng cho cơ sở dữ liệu (chẳng hạn như PL / SQL, T-SQL, …) được hỗ trợ) hoặc Java (để chuyển đổi dữ liệu nâng cao hoặc xử lý các LOB). Hướng dẫn ngắn gọn này sẽ giúp bạn cách thiết lập và chạy với công cụ Flyway Command-line và sử dụng trên cơ sở dữ liệu MSSQL. Bạn sẽ mất khoảng 10 phút để hoàn thành hướng dẫn này.","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="main.css"></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="index.html">My Blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="about.html">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Cách cài đặt và sử dụng Flyway cho window</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2021-11-14T09:50:24+07:00" itemprop="datePublished">Nov 14, 2021
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="giới-thiệu">Giới Thiệu:</h2>
+<p>Flyway là một công cụ di chuyển cơ sở dữ liệu mã nguồn mở. Nó được ủng hộ mạnh mẽ vì quy ước và cấu hình đơn giản<br />
+Nó chỉ dựa trên 7 lệnh cơ bản: Migrate, Clean, Info, Validate, Undo, Baseline and Repair.<br />
+Các phép di chuyển có thể được viết bằng SQL (cú pháp dành riêng cho cơ sở dữ liệu (chẳng hạn như PL / SQL, T-SQL, …) được hỗ trợ) hoặc Java (để chuyển đổi dữ liệu nâng cao hoặc xử lý các LOB).<br />
+Hướng dẫn ngắn gọn này sẽ giúp bạn cách thiết lập và chạy với công cụ Flyway Command-line và sử dụng trên cơ sở dữ liệu MSSQL.<br />
+Bạn sẽ mất khoảng 10 phút để hoàn thành hướng dẫn này.</p>
+
+<h2 id="tải-và-cài-đặt-flyway-command-line-và-spawnctlexe">Tải và cài đặt Flyway Command-line và spawnctl.exe</h2>
+<h3 id="itải-flyway-command-line-và-spawnctlexe">I.Tải Flyway Command-line và spawnctl.exe</h3>
+<p><a href="https://flywaydb.org/download">Tải Flyway Command-line</a><br />
+<a href="https://drive.google.com/file/d/1edfyclnAnEghc52cEOuM8tLvnSYZqgKQ/view?usp=sharing">Tải spawnctl.exe</a><br />
+pawnctl.exe không phải là một trình cài đặt, nó là một tệp thực thi dòng lệnh có thể chạy trực tiếp. Bạn nên tạo thư mục <strong>C: \ Program Files \ Spawn</strong> và lưu nó ở đó để dễ dàng thao tác.
+Đồng thời bạn cũng nên lưu và giải nén Flyway Command-line tại thư mục này.</p>
+<h3 id="iisử-dụng-spawnctlexe-với-cmd">II.Sử dụng spawnctl.exe với CMD</h3>
+<p>1.Lưu patch cài đặt sqwnctl.exe để có thể gọi bằng cmd.<br />
+Các bạn mở <strong>Control Panel</strong> –&gt; <strong>System and Security</strong> –&gt;System<br />
+Tại tab <strong>Related settings</strong> –&gt; <strong>Advanced system settings</strong><br />
+<img src="https://user-images.githubusercontent.com/94233704/141674523-bff7417d-3ab2-42f5-b7fc-927519abb09b.png" alt="" /></p>
+
+<p>Tại tab <strong>Avanced</strong> chọn <strong>Environment Variables</strong><br />
+<img src="https://user-images.githubusercontent.com/94233704/141674685-579a165c-f8fd-4345-bd64-81d76fb59941.PNG" alt="" /></p>
+
+<p>Tại tab <strong>System Variable</strong> tìm đến variable <strong>Path</strong><br />
+<img src="https://user-images.githubusercontent.com/94233704/141674687-0d72e0bf-7841-4f97-bcec-e62588734fa3.PNG" alt="" /></p>
+
+<p>Chọn <strong>Edit</strong> –&gt; <strong>New</strong> –&gt; nhập đường dẫn bạn lưu file spqwnctl.exe vào.<br />
+Ở đây tôi để là <strong>C: \ Program Files \ Spawn</strong></p>
+
+<p><img src="https://user-images.githubusercontent.com/94233704/141674688-260576e0-1ab3-4021-b39c-cdfe406451af.PNG" alt="" /></p>
+
+<p>Chọn <strong>Ok</strong> ở tất các các cửa sổ đang mở khi thay đổi đường dẫn</p>
+
+<p>2.Mở <strong>CMD</strong> bằng quyền quản trị<br />
+Bạn mở <strong>CMD</strong> và chạy với quyền quản trị bằng cách gõ ‘CMD’ vào thanh tìm kiếm. Sau đó nhấn chuột phải vào ‘Command Promt’ chọn ‘Run as Admintrator’.
+Hoặc bạn có thể nhấn tổ hợp phím <strong>Window + R</strong> gõ ‘cmd’ sau đó nhấn tổ hợp phím <strong>Ctrl + Shift + Enter</strong>.<br />
+3.Gọi spawnctl.exe bằng cmd<br />
+Tại cmd bạn gõ lệnh <code>spawnctl</code> . Một bảng hiện thị các lệnh bạn có thể dử dụng với spawnctl hiện lên
+<img src="https://user-images.githubusercontent.com/94233704/141676084-f8ed56b4-3fc3-4a81-b133-80b10213b34c.PNG" alt="" /></p>
+
+<p>4.Chỉnh sửa file <strong>flyway.conf</strong><br />
+Các bạn giải nén file <strong>Flyway Command-line</strong> đã cài đặt vào <strong>C: \ Program Files \ Spawn</strong><br />
+Các bạn tìm đến file <strong>flyway.conf</strong> theo đường dẫn<br />
+<strong>C:\Program Files\Spawn\flyway-8.0.4\conf\flyway.conf</strong><br />
+Tại file <strong>flyway.conf</strong> các bạn sửa thành<br />
+<code>
+    flyway.url=[url]<br />
+    flyway.user=[User]<br />
+    flyway.password=[Password]<br />
+</code>
+Ví dụ tôi sẽ sửa thành<br />
+<code>
+    flyway.url=jdbc:sqlserver://DESKTOP-37RFLV9\\SQLEXPRESS:1433;databaseName=EduSys<br />
+    flyway.user=sa<br />
+    flyway.password=123<br />
+</code>
+Sau đó các bạn lưu và đóng file <strong>flyway.conf</strong> lại<br />
+5.Thực hiện migrate<br />
+Đầu tiên các bạn mở cmd và trỏ tới địa chỉ của file <strong>flyway-8.0.4</strong> bằng lệnh<br />
+<code>cd "C:\Program Files\Spawn\flyway-8.0.4"</code><br />
+<img src="https://user-images.githubusercontent.com/94233704/141676808-410efaf5-eb1c-475e-882f-657f4282d256.PNG" alt="" /></p>
+
+<p>Sau đó cmd đã được trỏ về file <strong>flyway-8.0.4</strong><br />
+Để có thể thực hiện được việc migrate chúng ta cần lưu các phiên bản .sql vào thư mục <strong>C:\Program Files\Spawn\flyway-8.0.4\sql</strong><br />
+Ví dụ ở đây tôi có file <strong>V1__Create_person_table.sql</strong><br />
+<code>
+    create table PERSON (
+    ID int not null,
+    NAME varchar(100) not null
+);
+</code>
+Để có thể migrate được file sql này. Ta gõ lệnh <code>flyway -baselineOnMigrate="true" migrate</code>
+<img src="https://user-images.githubusercontent.com/94233704/141677904-4e88e27f-946f-4637-aa27-5da0424ebd29.PNG" alt="" /></p>
+
+<p>Bạn có thể xem thông tin phiên bản của database bằng cách dùng lệnh <code>flyway info</code><br />
+<img src="https://user-images.githubusercontent.com/94233704/141677906-22148a07-d540-414c-9aee-1c94e55bee3a.PNG" alt="" /></p>
+
+<p>Tiếp theo chúng ta hãy cũng thử thêm một vài dữ liệu thông qua phiên bản <strong>V2__ADD_person_table.sql</strong><br />
+<code>
+insert into PERSON (ID, NAME) values (1, 'Axel');<br />
+insert into PERSON (ID, NAME) values (2, 'Mr. Foo');<br />
+insert into PERSON (ID, NAME) values (3, 'Ms. Bar');<br />
+</code>
+Sử dụng cmd ta gõ lệnh <code>flyway -baselineOnMigrate="true" migrate</code>
+<img src="https://user-images.githubusercontent.com/94233704/141677907-5e7a0f7b-8d23-41fd-b0d3-e8a3112da1e5.PNG" alt="" /></p>
+
+<p>Tiếp tục dùng lệnh <code>flyway info</code><br />
+<img src="https://user-images.githubusercontent.com/94233704/141677909-83e61c41-3e44-4f73-80c4-c69f2b9e43d0.PNG" alt="" /></p>
+
+<p>Và bây giờ database của chúng ta đang ở tại v2</p>
+
+<p>6.Thực hiện undo<br />
+Để có thể trở về v1 chúng ta cần sửa dụng đến undo.<br />
+Để có thể sử dụng undo chúng ta cần một file sql chưa các câu lệnh thực hiện undo<br />
+Ví dụ để thực hiện undo về v1 ta có file <strong>U2__CreateTable_person.sql</strong>
+<code>delete from PERSON</code>
+Để thực hiện undo chúng ta dùng lệnh <code>flyway undo</code> trong cmd<br />
+<img src="https://user-images.githubusercontent.com/94233704/141678218-467312bd-104a-40de-8624-edada7fa7123.PNG" alt="" /></p>
+
+<p>Dùng lệnh <code>flyway info</code> để kiểm tra<br />
+<img src="https://user-images.githubusercontent.com/94233704/141678220-f8ebd763-b854-40ba-ac8b-f445163206db.PNG" alt="" /></p>
+
+<p>Bây giờ chúng ta tháy rằng việc undo đã được thực hiện và v2 đang ở trạng thái ‘pending’ tức là có thể thực hiên.</p>
+
+<h3 id="iiimở-rộng">III.Mở rộng</h3>
+<p>1.Undo về vị trí được chọn<br />
+<img src="https://user-images.githubusercontent.com/94233704/141678683-fa6da192-027f-43ca-9cd8-fc4b12257f1b.PNG" alt="" /></p>
+
+<p>Tại đây phiên bản của database đang là v3. Nếu muốn trở về v1 chúng ta phải sử dụng đến <code>-cherryPick</code><br />
+Cú pháp để trở về v1 sẽ là <code>flyway -cherryPick=2 undo</code><br />
+<img src="https://user-images.githubusercontent.com/94233704/141678677-d0f0d46a-11b1-4911-abe0-0e88c6604f8d.PNG" alt="" /></p>
+
+<p>Khi đấy trạng thái của v3 sẽ là Undone và của v2 sẽ là ignore. Tức là hiện phiên bản duy nhất được thực hiện chính là v1<br />
+<img src="https://user-images.githubusercontent.com/94233704/141678678-036ae2af-aef3-444d-ab88-37251e4e5c33.PNG" alt="" /></p>
+
+<p>Do đó ta có thể dễ dàng trở về phiên bản v1.</p>
+
+<p>2.Quy tắc đặt tên file sql
+<img src="https://user-images.githubusercontent.com/94233704/141678783-5ec46ede-5244-4d32-9fda-a23073735ddc.png" alt="" /></p>
+
+<p>-prefix: Có thể sử dụng prefix khác, default: V cho versioned migrations, U cho Undo migrations.<br />
+-version: (chỉ áp dung cho Versioned migrations) có thể thêm dấu . hoặc _ để thêm minor version, ví dụ như : V1_2<br />
+-separator: 2 dấu gạch dưới __<br />
+-description: Dấu gạch dưới hoặc khoảng trắng để phân biệt các từ.<br />
+Ví dụ: <strong>V2__ADD_person_table.sql</strong> , <strong>V2.1__ADD_person_table.sql</strong> ,<strong>U2__CreateTable_person.sql</strong></p>
+
+  </div><a class="u-url" href="/jekyll/update/2021/11/14/how-to-install-flyway.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">My Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">My Blog</li><li><a class="u-email" href="mailto:lucttph17307@fpt.edu.vn">lucttph17307@fpt.edu.vn</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/luctrinh02"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">luctrinh02</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p></p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
